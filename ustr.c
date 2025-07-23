@@ -39,7 +39,6 @@ and ending at index end (exclusive).
 Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
-<<<<<<< HEAD
 	 // TODO: implement this
     if (start < 0) {
         return new_ustr("");
@@ -84,9 +83,7 @@ UStr substring(UStr s, int32_t start, int32_t end) {
     UStr result = new_ustr(new_str);
     free(new_str);
     return result;
-=======
 	// TODO: implement this
->>>>>>> 78e431f9eb2785fbd98ddf8522a924d8893af269
 }
 
 
@@ -125,7 +122,7 @@ removed from the original string.
 Returns the original string if index is out of bounds.
 */
 UStr removeAt(UStr s, int32_t index) {
-<<<<<<< HEAD
+
 	// TODO: implement this
  
 =======
@@ -184,7 +181,6 @@ UStr reverse(UStr s) {
 	free(reversed_contents);
 
 	return result;
->>>>>>> 78e431f9eb2785fbd98ddf8522a924d8893af269
 
 }
 
@@ -199,7 +195,6 @@ void free_ustr(UStr s) {
 		s.contents = NULL;
 	}
 }
-<<<<<<< HEAD
 
 // Adding main funct for testing
 //int main() {
@@ -217,5 +212,4 @@ void free_ustr(UStr s) {
 
     //return 0;
 //}
-=======
->>>>>>> 78e431f9eb2785fbd98ddf8522a924d8893af269
+
