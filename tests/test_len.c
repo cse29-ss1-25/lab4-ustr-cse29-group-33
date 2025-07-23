@@ -13,6 +13,10 @@ int main() {
 
         UStr s = new_ustr(input);
         printf("len(%s) = %d\n", s.contents, len(s));
+<<<<<<< HEAD
+	free_ustr(s);
+=======
  	free_ustr(s);
+>>>>>>> f8bbf24be5036c44d4c0d06ba0f5876fa80a3ef8
     }
 }

@@ -40,7 +40,6 @@ Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
 	// TODO: implement this
-
 }
 
 /*
@@ -78,7 +77,29 @@ removed from the original string.
 Returns the original string if index is out of bounds.
 */
 UStr removeAt(UStr s, int32_t index) {
-	// TODO: implement this
+	// checking for out of bounds index 
+	if (index < 0 || index >= len(s)) return s;
+	
+	int current = 0; 
+	int byte = 0;
+
+	while (current < index) {
+		byte += utf8_codepoint_size((uint8_t)s.contents[byte]);
+		current++;
+	}
+
+	int remove_size = utf8_codepoint_size((uint8_t)s.contents[byte]);
+	int new_length = s.bytes - remove_size;
+
+	char* new_contents = malloc(new_length + 1);
+	memcpy(new_contents, s.contents, byte);
+	memcpy(new_contents + byte, s.contents + byte + remove_size, s.bytes - byte - remove_size);
+	new_contents[new_length] = '\0';
+	free_ustr(s);
+
+	UStr result = new_ustr(new_contents);
+	free(new_contents);
+	return result;
 
 }
 
@@ -120,6 +141,8 @@ void free_ustr(UStr s) {
 		s.contents = NULL;
 	}
 }
+<<<<<<< HEAD
+=======
 
 // Adding main funct for testing
 /*int main() {
@@ -138,3 +161,4 @@ void free_ustr(UStr s) {
     return 0;
 }
 */
+>>>>>>> b37c83ac75b45de9155b12bbc632e120911ea728
