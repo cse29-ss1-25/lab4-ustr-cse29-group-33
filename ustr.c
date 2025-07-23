@@ -8,6 +8,8 @@
 /*
 Initializes a new UStr with contents
 */
+
+
 UStr new_ustr(char* contents) {
 	int32_t bytes = strlen(contents);
 	int32_t codepoints = utf8_strlen(contents);
@@ -86,7 +88,24 @@ Given a string s, return s reversed.
 Example: reverse("apples🍎 and bananas🍌") = "🍌sananab dna 🍎selppa")
 */
 UStr reverse(UStr s) {
-	// TODO: implement this
+	int cp_len = s.codepoints;
+	char* reversed_contents = malloc(s.bytes + 1);
+	int reversed_index = 0;
+
+	for (int i = cp_len - 1; i >= 0; i--) {
+		int byte_index = bi_of_cpi(s.contents, i);
+		int size = utf8_codepoint_size(s.contents[byte_index]);
+
+		memcpy(&reversed_contents[reversed_index], &s.contents[byte_index], size);
+		reversed_index += size;
+	}
+	reversed_contents[reversed_index] = '\0';
+
+
+	UStr result = new_ustr(reversed_contents);
+	free(reversed_contents);
+
+	return result;
 
 }
 
