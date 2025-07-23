@@ -47,7 +47,26 @@ concatenating s1 and s2.
 */
 UStr concat(UStr s1, UStr s2) {
 	// TODO: implement this
+	int32_t new_byte = s1.bytes + s2.bytes;
+	int32_t new_cp = s1.codepoints + s2.codepoints;
+	uint8_t is_all_ascii = s1.is_ascii && s2.is_ascii;
 
+	char* new_contents = malloc(new_byte + 1);
+
+	if (new_contents == NULL) {
+		return (UStr){0, 0, 1, NULL};
+	}
+
+	memcpy(new_contents, s1.contents, s1.bytes);
+	memcpy(new_contents + s1.bytes, s2.contents, s2.bytes);
+
+	UStr result = {
+		new_cp,
+		new_byte,
+		is_all_ascii,
+		new_contents
+	};
+	return result;
 }
 
 /*
@@ -83,3 +102,20 @@ void free_ustr(UStr s) {
 	}
 }
 
+// Adding main funct for testing
+/*int main() {
+    UStr s1 = new_ustr("Hello, ");
+    UStr s2 = new_ustr("world!");
+    UStr result1 = concat(s1, s2);
+
+    print_ustr(s1);
+    printf("\n");
+    print_ustr(s2);
+    printf("\n");
+    printf("Result of Concat: ");
+    print_ustr(result1);
+    printf("\n");
+
+    return 0;
+}
+*/
