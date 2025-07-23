@@ -8,6 +8,8 @@
 /*
 Initializes a new UStr with contents
 */
+
+
 UStr new_ustr(char* contents) {
 	int32_t bytes = strlen(contents);
 	int32_t codepoints = utf8_strlen(contents);
@@ -37,6 +39,7 @@ and ending at index end (exclusive).
 Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
+<<<<<<< HEAD
 	 // TODO: implement this
     if (start < 0) {
         return new_ustr("");
@@ -81,6 +84,9 @@ UStr substring(UStr s, int32_t start, int32_t end) {
     UStr result = new_ustr(new_str);
     free(new_str);
     return result;
+=======
+	// TODO: implement this
+>>>>>>> 78e431f9eb2785fbd98ddf8522a924d8893af269
 }
 
 
@@ -119,8 +125,35 @@ removed from the original string.
 Returns the original string if index is out of bounds.
 */
 UStr removeAt(UStr s, int32_t index) {
+<<<<<<< HEAD
 	// TODO: implement this
  
+=======
+	// checking for out of bounds index 
+	if (index < 0 || index >= len(s)) return s;
+	
+	int current = 0; 
+	int byte = 0;
+
+	while (current < index) {
+		byte += utf8_codepoint_size((uint8_t)s.contents[byte]);
+		current++;
+	}
+
+	int remove_size = utf8_codepoint_size((uint8_t)s.contents[byte]);
+	int new_length = s.bytes - remove_size;
+
+	char* new_contents = malloc(new_length + 1);
+	memcpy(new_contents, s.contents, byte);
+	memcpy(new_contents + byte, s.contents + byte + remove_size, s.bytes - byte - remove_size);
+	new_contents[new_length] = '\0';
+	free_ustr(s);
+
+	UStr result = new_ustr(new_contents);
+	free(new_contents);
+	return result;
+
+>>>>>>> 78e431f9eb2785fbd98ddf8522a924d8893af269
 }
 
 /*
@@ -129,8 +162,29 @@ Given a string s, return s reversed.
 Example: reverse("apples🍎 and bananas🍌") = "🍌sananab dna 🍎selppa")
 */
 UStr reverse(UStr s) {
+<<<<<<< HEAD
 	// TODO: implement this
   
+=======
+	int cp_len = s.codepoints;
+	char* reversed_contents = malloc(s.bytes + 1);
+	int reversed_index = 0;
+
+	for (int i = cp_len - 1; i >= 0; i--) {
+		int byte_index = bi_of_cpi(s.contents, i);
+		int size = utf8_codepoint_size(s.contents[byte_index]);
+
+		memcpy(&reversed_contents[reversed_index], &s.contents[byte_index], size);
+		reversed_index += size;
+	}
+	reversed_contents[reversed_index] = '\0';
+
+
+	UStr result = new_ustr(reversed_contents);
+	free(reversed_contents);
+
+	return result;
+>>>>>>> 78e431f9eb2785fbd98ddf8522a924d8893af269
 
 }
 
@@ -145,6 +199,7 @@ void free_ustr(UStr s) {
 		s.contents = NULL;
 	}
 }
+<<<<<<< HEAD
 
 // Adding main funct for testing
 //int main() {
@@ -162,3 +217,5 @@ void free_ustr(UStr s) {
 
     //return 0;
 //}
+=======
+>>>>>>> 78e431f9eb2785fbd98ddf8522a924d8893af269
