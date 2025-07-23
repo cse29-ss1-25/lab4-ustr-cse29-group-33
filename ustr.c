@@ -37,8 +37,50 @@ and ending at index end (exclusive).
 Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
-	// TODO: implement this
+	 // TODO: implement this
+    if (start < 0) {
+        return new_ustr("");
+    }
+    if (end > s.codepoints) {
+        return new_ustr("");
+    }
+    if (start >= end) {
+        return new_ustr("");
+    }
+    int byte_index = 0;
+    int cp_index = 0;
+    int start_byte = 0;
+    int end_byte = 0;
 
+    while (s.contents[byte_index] != '\0') {
+        if (cp_index == start) {
+            start_byte = byte_index;
+        }
+        if (cp_index == end) {
+            end_byte = byte_index;
+            break;
+        }
+
+        int size = utf8_codepoint_size(s.contents[byte_index]);
+        byte_index = byte_index + size;
+        cp_index = cp_index + 1;
+
+    }
+    if (end_byte == 0) {
+        end_byte = byte_index;
+    }
+
+    int length = end_byte - start_byte;
+    char *new_str = malloc(length + 1);
+    int i = 0;
+    while (i < length) {
+        new_str[i] = s.contents[start_byte + i];
+        i = i + 1;
+    }
+    new_str[length] = '\0';
+    UStr result = new_ustr(new_str);
+    free(new_str);
+    return result;
 }
 
 // for utf8_strlen
@@ -111,7 +153,7 @@ Returns the original string if index is out of bounds.
 */
 UStr removeAt(UStr s, int32_t index) {
 	// TODO: implement this
-
+ 
 }
 
 /*
@@ -121,6 +163,7 @@ Example: reverse("apples🍎 and bananas🍌") = "🍌sananab dna 🍎selppa")
 */
 UStr reverse(UStr s) {
 	// TODO: implement this
+  
 
 }
 
@@ -137,18 +180,18 @@ void free_ustr(UStr s) {
 }
 
 // Adding main funct for testing
-int main() {
-    UStr s1 = new_ustr("Hello, ");
-    UStr s2 = new_ustr("world!");
-    UStr result1 = concat(s1, s2);
+//int main() {
+   // UStr s1 = new_ustr("Hello, ");
+    //UStr s2 = new_ustr("world!");
+    //UStr result1 = concat(s1, s2);
 
-    print_ustr(s1);
-    printf("\n");
-    print_ustr(s2);
-    printf("\n");
-    printf("Result of Concat: ");
-    print_ustr(result1);
-    printf("\n");
+    //print_ustr(s1);
+    //printf("\n");
+    //print_ustr(s2);
+    //printf("\n");
+    //printf("Result of Concat: ");
+    //print_ustr(result1);
+    //printf("\n");
 
-    return 0;
-}
+    //return 0;
+//}
