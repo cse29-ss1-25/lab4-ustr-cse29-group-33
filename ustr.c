@@ -141,24 +141,3 @@ void free_ustr(UStr s) {
 		s.contents = NULL;
 	}
 }
-<<<<<<< HEAD
-=======
-
-// Adding main funct for testing
-/*int main() {
-    UStr s1 = new_ustr("Hello, ");
-    UStr s2 = new_ustr("world!");
-    UStr result1 = concat(s1, s2);
-
-    print_ustr(s1);
-    printf("\n");
-    print_ustr(s2);
-    printf("\n");
-    printf("Result of Concat: ");
-    print_ustr(result1);
-    printf("\n");
-
-    return 0;
-}
-*/
->>>>>>> b37c83ac75b45de9155b12bbc632e120911ea728
