@@ -41,13 +41,66 @@ UStr substring(UStr s, int32_t start, int32_t end) {
 
 }
 
+// for utf8_strlen
+int8_t utf8_codepoint_size(char c) {
+    unsigned char first_byte = (unsigned char)c;
+    if (first_byte < 0x80) {
+        return 1;
+    } else if ((first_byte & 0xE0) == 0xC0) {
+        return 2;
+    } else if ((first_byte & 0xF0) == 0xE0) {
+        return 3;
+    } else if ((first_byte & 0xF8) == 0xF0) {
+        return 4;
+    } else {
+        return -1;
+    }
+}
+
+// helper for concat
+int32_t utf8_strlen(char str[]) {
+    int32_t codepoint_count = 0;
+    int32_t byte_index = 0;
+
+    while (str[byte_index] != '\0') {
+        unsigned char first_byte = (unsigned char)str[byte_index];
+        int bytes_in_codepoint = utf8_codepoint_size(first_byte);
+        if(bytes_in_codepoint < 0) {
+            return -1; // Invalid UTF-8 encoding
+        }
+        byte_index += bytes_in_codepoint;
+        codepoint_count++;
+    }
+
+    return codepoint_count;
+}
+
 /*
 Given 2 strings s1 and s2, returns a string that is the result of 
 concatenating s1 and s2. 
 */
 UStr concat(UStr s1, UStr s2) {
 	// TODO: implement this
+	int32_t new_byte = s1.bytes + s2.bytes;
+	int32_t new_cp = s1.codepoints + s2.codepoints;
+	uint8_t is_all_ascii = s1.is_ascii && s2.is_ascii;
 
+	char* new_contents = malloc(new_byte + 1);
+
+	if (new_contents == NULL) {
+		return (UStr){0, 0, 1, NULL};
+	}
+
+	memcpy(new_contents, s1.contents, s1.bytes);
+	memcpy(new_contents + s1.bytes, s2.contents, s2.bytes);
+
+	UStr result = {
+		new_cp,
+		new_byte,
+		is_all_ascii,
+		new_contents
+	};
+	return result;
 }
 
 /*
@@ -83,3 +136,19 @@ void free_ustr(UStr s) {
 	}
 }
 
+// Adding main funct for testing
+int main() {
+    UStr s1 = new_ustr("Hello, ");
+    UStr s2 = new_ustr("world!");
+    UStr result1 = concat(s1, s2);
+
+    print_ustr(s1);
+    printf("\n");
+    print_ustr(s2);
+    printf("\n");
+    printf("Result of Concat: ");
+    print_ustr(result1);
+    printf("\n");
+
+    return 0;
+}
