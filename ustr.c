@@ -41,40 +41,6 @@ UStr substring(UStr s, int32_t start, int32_t end) {
 
 }
 
-// for utf8_strlen
-int8_t utf8_codepoint_size(char c) {
-    unsigned char first_byte = (unsigned char)c;
-    if (first_byte < 0x80) {
-        return 1;
-    } else if ((first_byte & 0xE0) == 0xC0) {
-        return 2;
-    } else if ((first_byte & 0xF0) == 0xE0) {
-        return 3;
-    } else if ((first_byte & 0xF8) == 0xF0) {
-        return 4;
-    } else {
-        return -1;
-    }
-}
-
-// helper for concat
-int32_t utf8_strlen(char str[]) {
-    int32_t codepoint_count = 0;
-    int32_t byte_index = 0;
-
-    while (str[byte_index] != '\0') {
-        unsigned char first_byte = (unsigned char)str[byte_index];
-        int bytes_in_codepoint = utf8_codepoint_size(first_byte);
-        if(bytes_in_codepoint < 0) {
-            return -1; // Invalid UTF-8 encoding
-        }
-        byte_index += bytes_in_codepoint;
-        codepoint_count++;
-    }
-
-    return codepoint_count;
-}
-
 /*
 Given 2 strings s1 and s2, returns a string that is the result of 
 concatenating s1 and s2. 
@@ -137,7 +103,7 @@ void free_ustr(UStr s) {
 }
 
 // Adding main funct for testing
-int main() {
+/*int main() {
     UStr s1 = new_ustr("Hello, ");
     UStr s2 = new_ustr("world!");
     UStr result1 = concat(s1, s2);
@@ -152,3 +118,4 @@ int main() {
 
     return 0;
 }
+*/
