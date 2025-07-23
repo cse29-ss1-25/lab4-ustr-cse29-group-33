@@ -8,6 +8,8 @@
 /*
 Initializes a new UStr with contents
 */
+
+
 UStr new_ustr(char* contents) {
 	int32_t bytes = strlen(contents);
 	int32_t codepoints = utf8_strlen(contents);
@@ -39,21 +41,6 @@ Returns an empty string on invalid range.
 UStr substring(UStr s, int32_t start, int32_t end) {
 	// TODO: implement this
 }
-
-int8_t utf8_codepoint(char c) {
-	unsigned char first_byte = (unsigned char)c;
-	if (first_byte < 0x80) {
-		return 1;
-	} else if ((first_byte & 0xE0) == 0xC0) {
-		return 2;
-	} else if ((first_byte & 0xF0) == 0xE0) {
-		return 3;
-	} else if ((first_byte & 0xF8) == 0xF0) {
-		return 4;
-	} else {
-		return -1;
-	}
-}	
 
 /*
 Given 2 strings s1 and s2, returns a string that is the result of 
@@ -97,11 +84,11 @@ UStr removeAt(UStr s, int32_t index) {
 	int byte = 0;
 
 	while (current < index) {
-		byte += utf8_codepoint((uint8_t)s.contents[byte]);
+		byte += utf8_codepoint_size((uint8_t)s.contents[byte]);
 		current++;
 	}
 
-	int remove_size = utf8_codepoint((uint8_t)s.contents[byte]);
+	int remove_size = utf8_codepoint_size((uint8_t)s.contents[byte]);
 	int new_length = s.bytes - remove_size;
 
 	char* new_contents = malloc(new_length + 1);
@@ -122,7 +109,24 @@ Given a string s, return s reversed.
 Example: reverse("apples🍎 and bananas🍌") = "🍌sananab dna 🍎selppa")
 */
 UStr reverse(UStr s) {
-	// TODO: implement this
+	int cp_len = s.codepoints;
+	char* reversed_contents = malloc(s.bytes + 1);
+	int reversed_index = 0;
+
+	for (int i = cp_len - 1; i >= 0; i--) {
+		int byte_index = bi_of_cpi(s.contents, i);
+		int size = utf8_codepoint_size(s.contents[byte_index]);
+
+		memcpy(&reversed_contents[reversed_index], &s.contents[byte_index], size);
+		reversed_index += size;
+	}
+	reversed_contents[reversed_index] = '\0';
+
+
+	UStr result = new_ustr(reversed_contents);
+	free(reversed_contents);
+
+	return result;
 
 }
 
