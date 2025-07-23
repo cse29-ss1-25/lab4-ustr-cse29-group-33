@@ -38,8 +38,22 @@ Returns an empty string on invalid range.
 */
 UStr substring(UStr s, int32_t start, int32_t end) {
 	// TODO: implement this
-
 }
+
+int8_t utf8_codepoint(char c) {
+	unsigned char first_byte = (unsigned char)c;
+	if (first_byte < 0x80) {
+		return 1;
+	} else if ((first_byte & 0xE0) == 0xC0) {
+		return 2;
+	} else if ((first_byte & 0xF0) == 0xE0) {
+		return 3;
+	} else if ((first_byte & 0xF8) == 0xF0) {
+		return 4;
+	} else {
+		return -1;
+	}
+}	
 
 /*
 Given 2 strings s1 and s2, returns a string that is the result of 
@@ -64,11 +78,11 @@ UStr removeAt(UStr s, int32_t index) {
 	int byte = 0;
 
 	while (current < index) {
-		byte += utf8_codepoint_size(s.contents[byte]);
+		byte += utf8_codepoint((uint8_t)s.contents[byte]);
 		current++;
 	}
 
-	int remove_size = utf8_codepoint_size(s.contents[byte]);
+	int remove_size = utf8_codepoint((uint8_t)s.contents[byte]);
 	int new_length = s.bytes - remove_size;
 
 	char* new_contents = malloc(new_length + 1);
@@ -76,8 +90,10 @@ UStr removeAt(UStr s, int32_t index) {
 	memcpy(new_contents + byte, s.contents + byte + remove_size, s.bytes - byte - remove_size);
 	new_contents[new_length] = '\0';
 	free_ustr(s);
-	
-	return new_ustr(new_contents);
+
+	UStr result = new_ustr(new_contents);
+	free(new_contents);
+	return result;
 
 }
 
@@ -102,4 +118,3 @@ void free_ustr(UStr s) {
 		s.contents = NULL;
 	}
 }
-
