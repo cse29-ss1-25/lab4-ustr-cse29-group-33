@@ -12,7 +12,12 @@ int main() {
         }
 
         UStr s = new_ustr(input);
+	UStr r = reverse(s);
+	print_ustr(r);
         printf("len(%s) = %d\n", s.contents, len(s));
  	free_ustr(s);
+	free_ustr(r);
     }
+	return 0;
 }
+
